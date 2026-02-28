@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yue (Valerie) Deng — Data Engineer</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream:    #fdfaf5;
+      --warm-bg:  #fff8f0;
+      --sand:     #f0e6d3;
+      --terra:    #c9704a;
+      --terra-lt: #e8906a;
+      --gold:     #d4a054;
+      --text:     #2e2218;
+      --text-mid: #5c4a36;
+      --text-lt:  #8a7060;
+      --white:    #ffffff;
+      --shadow:   rgba(80, 40, 10, 0.08);
+      --radius:   14px;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(253, 250, 245, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--sand);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 62px;
+    }
+
+    .nav-name {
+      font-size: 1.05rem; font-weight: bold;
+      color: var(--terra); letter-spacing: 0.3px;
+    }
+
+    .nav-links { display: flex; gap: 30px; list-style: none; }
+
+    .nav-links a {
+      text-decoration: none; font-family: 'Arial', sans-serif;
+      font-size: 0.85rem; color: var(--text-mid);
+      letter-spacing: 0.8px; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--terra); }
+
+    /* ── Hero ─────────────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #fff4e8 0%, #fde8d4 50%, #faf0e6 100%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 120px 5% 80px;
+      position: relative; overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(201,112,74,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(212,160,84,0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; max-width: 700px; }
+
+    .avatar {
+      width: 110px; height: 110px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--terra), var(--gold));
+      margin: 0 auto 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.6rem;
+      box-shadow: 0 8px 32px rgba(201,112,74,0.25);
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--terra); color: var(--white);
+      font-family: 'Arial', sans-serif; font-size: 0.78rem;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 5px 16px; border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    #hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: normal; line-height: 1.2;
+      color: var(--text); margin-bottom: 18px;
+    }
+
+    #hero h1 span { color: var(--terra); }
+
+    .hero-sub {
+      font-family: 'Arial', sans-serif;
+      font-size: 1.05rem; color: var(--text-mid);
+      max-width: 540px; margin: 0 auto 36px;
+      line-height: 1.8;
+    }
+
+    .hero-links {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 26px; border-radius: 30px;
+      font-family: 'Arial', sans-serif; font-size: 0.9rem;
+      text-decoration: none; transition: all 0.2s;
+      cursor: pointer; border: none;
+    }
+
+    .btn-primary {
+      background: var(--terra); color: var(--white);
+      box-shadow: 0 4px 16px rgba(201,112,74,0.3);
+    }
+    .btn-primary:hover { background: var(--terra-lt); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent; color: var(--terra);
+      border: 1.5px solid var(--terra);
+    }
+    .btn-outline:hover { background: var(--terra); color: var(--white); transform: translateY(-1px); }
+
+    .hero-social {
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    }
+
+    .social-link {
+      font-family: 'Arial', sans-serif; font-size: 0.82rem;
+      color: var(--text-lt); text-decoration: none;
+      display: flex; align-items: center; gap: 5px;
+      transition: color 0.2s;
+    }
+    .social-link:hover { color: var(--terra); }
+
+    .scroll-hint {
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+      font-family: 'Arial', sans-serif; font-size: 0.75rem;
+      color: var(--text-lt); letter-spacing: 1px;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      animation: bounce 2s infinite;
+    }
+    .scroll-hint span { font-size: 1.2rem; }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── Sections ─────────────────────────────────────────────────────── */
+    section { padding: 90px 5%; }
+    .section-inner { max-width: 900px; margin: 0 auto; }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--terra); margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: normal; color: var(--text);
+      margin-bottom: 48px; position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block; width: 48px; height: 3px;
+      background: linear-gradient(90deg, var(--terra), var(--gold));
+      border-radius: 2px; margin-top: 14px;
+    }
+
+    /* ── About ────────────────────────────────────────────────────────── */
+    #about { background: var(--white); }
+
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 1.05rem; color: var(--text-mid); margin-bottom: 18px;
+    }
+
+    .about-text strong { color: var(--terra); }
+
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    }
+
+    .stat-card {
+      background: var(--warm-bg);
+      border: 1px solid var(--sand);
+      border-radius: var(--radius);
+      padding: 22px 16px; text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.8rem; font-weight: bold;
+      color: var(--terra); display: block; line-height: 1.2;
+    }
+
+    .stat-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem; color: var(--text-lt); margin-top: 6px;
+    }
+
+    /* ── Skills ───────────────────────────────────────────────────────── */
+    #skills { background: var(--warm-bg); }
+
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 22px;
+    }
+
+    .skill-group {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 2px 16px var(--shadow);
+      border-top: 3px solid var(--terra);
+    }
+
+    .skill-group-title {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem; font-weight: bold;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--terra); margin-bottom: 14px;
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 7px; }
+
+    .tag {
+      font-family: 'Arial', sans-serif; font-size: 0.8rem;
+      background: var(--warm-bg); color: var(--text-mid);
+      border: 1px solid var(--sand);
+      padding: 4px 11px; border-radius: 20px;
+      transition: all 0.2s;
+    }
+
+    .tag.hot {
+      background: rgba(201,112,74,0.1);
+      border-color: rgba(201,112,74,0.3);
+      color: var(--terra);
+    }
+
+    .tag:hover {
+      background: var(--terra); color: var(--white);
+      border-color: var(--terra); cursor: default;
+    }
+
+    /* ── Experience ───────────────────────────────────────────────────── */
+    #experience { background: var(--white); }
+
+    .timeline { position: relative; padding-left: 28px; }
+
+    .timeline::before {
+      content: '';
+      position: absolute; left: 0; top: 8px; bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--terra), var(--gold), var(--sand));
+      border-radius: 2px;
+    }
+
+    .timeline-item { position: relative; margin-bottom: 48px; }
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    .timeline-dot {
+      position: absolute; left: -34px; top: 6px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--terra);
+      border: 3px solid var(--white);
+      box-shadow: 0 0 0 2px var(--terra);
+    }
+
+    .exp-card {
+      background: var(--warm-bg);
+      border: 1px solid var(--sand);
+      border-radius: var(--radius);
+      padding: 28px 30px;
+      transition: box-shadow 0.2s;
+    }
+    .exp-card:hover { box-shadow: 0 6px 28px var(--shadow); }
+
+    .exp-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .exp-company { font-size: 1.2rem; font-weight: bold; color: var(--text); }
+
+    .exp-period {
+      font-family: 'Arial', sans-serif; font-size: 0.82rem;
+      color: var(--text-lt); background: var(--sand);
+      padding: 3px 12px; border-radius: 20px; white-space: nowrap;
+    }
+
+    .exp-role {
+      font-family: 'Arial', sans-serif; font-size: 0.9rem;
+      color: var(--terra); margin-bottom: 16px; font-weight: bold;
+    }
+
+    .exp-card ul {
+      list-style: none; display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .exp-card li {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.88rem; color: var(--text-mid);
+      padding-left: 18px; position: relative; line-height: 1.65;
+    }
+
+    .exp-card li::before {
+      content: '▸'; position: absolute; left: 0;
+      color: var(--terra); font-size: 0.78rem; top: 3px;
+    }
+
+    .exp-card li strong { color: var(--text); }
+
+    .exp-subheader {
+      font-family: 'Arial', sans-serif; font-size: 0.78rem;
+      font-weight: bold; letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--text-lt); margin: 14px 0 8px;
+      padding-left: 0; border-left: 3px solid var(--gold);
+      padding-left: 10px;
+    }
+
+    .pill {
+      display: inline-block;
+      font-family: 'Arial', sans-serif; font-size: 0.75rem;
+      padding: 2px 9px; border-radius: 12px; margin-left: 5px;
+      font-weight: bold; vertical-align: middle;
+    }
+    .pill-gold {
+      background: rgba(212,160,84,0.15);
+      border: 1px solid rgba(212,160,84,0.4);
+      color: #8a6020;
+    }
+    .pill-green {
+      background: rgba(80,160,80,0.12);
+      border: 1px solid rgba(80,160,80,0.3);
+      color: #3a7a3a;
+    }
+
+    /* ── Projects ─────────────────────────────────────────────────────── */
+    #projects { background: var(--warm-bg); }
+
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .project-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 26px;
+      box-shadow: 0 2px 16px var(--shadow);
+      border-bottom: 3px solid var(--terra);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none; color: inherit; display: block;
+    }
+    .project-card:hover { transform: translateY(-4px); box-shadow: 0 10px 32px var(--shadow); }
+
+    .project-emoji { font-size: 1.8rem; margin-bottom: 12px; display: block; }
+
+    .project-name {
+      font-size: 1.05rem; font-weight: bold; color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .project-desc {
+      font-family: 'Arial', sans-serif; font-size: 0.85rem;
+      color: var(--text-mid); margin-bottom: 14px; line-height: 1.6;
+    }
+
+    .project-lang {
+      font-family: 'Arial', sans-serif; font-size: 0.78rem;
+      color: var(--terra);
+      background: rgba(201,112,74,0.1);
+      border: 1px solid rgba(201,112,74,0.2);
+      padding: 3px 10px; border-radius: 12px; display: inline-block;
+    }
+
+    /* ── Education ────────────────────────────────────────────────────── */
+    #education { background: var(--white); }
+
+    .edu-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    .edu-card {
+      background: var(--warm-bg);
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: 0 2px 16px var(--shadow);
+      border-left: 4px solid var(--terra);
+      transition: transform 0.2s;
+    }
+    .edu-card:hover { transform: translateY(-3px); }
+
+    .edu-school { font-size: 1.15rem; font-weight: bold; color: var(--text); margin-bottom: 4px; }
+
+    .edu-degree {
+      font-family: 'Arial', sans-serif; font-size: 0.9rem;
+      color: var(--terra); margin-bottom: 8px; font-weight: bold;
+    }
+
+    .edu-detail {
+      font-family: 'Arial', sans-serif; font-size: 0.85rem;
+      color: var(--text-lt); line-height: 1.6;
+    }
+
+    .edu-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+    .edu-badge {
+      display: inline-block;
+      background: rgba(212,160,84,0.12);
+      border: 1px solid rgba(212,160,84,0.35);
+      color: #8a6020;
+      font-family: 'Arial', sans-serif; font-size: 0.78rem;
+      padding: 3px 12px; border-radius: 12px;
+    }
+
+    /* ── Contact ──────────────────────────────────────────────────────── */
+    #contact {
+      background: linear-gradient(135deg, #3d1f0e, #5c3018);
+      color: var(--white); text-align: center;
+      padding: 80px 5%;
+    }
+
+    #contact .section-label { color: var(--gold); }
+    #contact .section-title { color: var(--white); margin-bottom: 16px; }
+    #contact .section-title::after { background: var(--gold); margin: 14px auto 0; }
+
+    .contact-sub {
+      font-family: 'Arial', sans-serif; font-size: 0.95rem;
+      color: rgba(255,255,255,0.7); margin-bottom: 40px;
+      max-width: 460px; margin-left: auto; margin-right: auto;
+    }
+
+    .contact-items {
+      display: flex; gap: 16px; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 0;
+    }
+
+    .contact-item {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 30px; padding: 10px 20px;
+      font-family: 'Arial', sans-serif; font-size: 0.88rem;
+      color: var(--white); text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-item:hover { background: rgba(255,255,255,0.18); }
+
+    footer {
+      background: #2a1408;
+      text-align: center; padding: 20px;
+      font-family: 'Arial', sans-serif; font-size: 0.78rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ── Responsive ───────────────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 16px; }
+    }
+    @media (max-width: 480px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────────────────────────── -->
+<nav>
+  <span class="nav-name">Yue (Valerie) Deng</span>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="avatar">🌿</div>
+    <div class="hero-tag">Open to Opportunities</div>
+    <h1>Hi, I'm <span>Yue (Valerie) Deng</span></h1>
+    <p class="hero-sub">
+      Data Engineer with 3+ years building production-grade pipelines, cloud migration
+      frameworks, and large-scale orchestration systems on GCP. Proven track record
+      delivering <strong style="color:var(--terra)">$5M+ in infrastructure cost savings</strong>.
+      Focused on pipeline reliability, data platform tooling, and infrastructure automation
+      across BigQuery, Dataproc, and Apache Airflow.
+    </p>
+    <div class="hero-links">
+      <a href="#experience" class="btn btn-primary">View My Work</a>
+      <a href="#contact" class="btn btn-outline">Get In Touch</a>
+    </div>
+    <div class="hero-social">
+      <a class="social-link" href="https://linkedin.com/in/valerie-deng" target="_blank">💼 LinkedIn</a>
+      <a class="social-link" href="https://github.com/yuedeng1998" target="_blank">🐙 GitHub</a>
+      <span class="social-link">📍 Los Angeles, CA</span>
+    </div>
+  </div>
+  <div class="scroll-hint">scroll <span>↓</span></div>
+</section>
+
+<!-- ── About ──────────────────────────────────────────────────────────────── -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label">Who I Am</div>
+    <h2 class="section-title">About Me</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          Data Engineer with <strong>3+ years</strong> of experience building
+          production-grade data pipelines, cloud migration frameworks, and
+          large-scale orchestration systems on GCP.
+        </p>
+        <p>
+          At Yahoo, I led an end-to-end migration from on-prem Hadoop to GCP —
+          provisioning <strong>1,000+ Airflow DAGs</strong> processing
+          <strong>50TB/day</strong> of mail events, and cutting compute costs by
+          <strong>99.7%</strong>. Total infrastructure savings: <strong>$5M+</strong>.
+        </p>
+        <p>
+          Focused on pipeline reliability, data platform tooling, and infrastructure
+          automation. Based in <strong>Los Angeles, CA</strong>.
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <span class="stat-number">$5M+</span>
+          <span class="stat-label">Infrastructure Cost Saved</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">50TB</span>
+          <span class="stat-label">Data Processed / Day</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">1,000+</span>
+          <span class="stat-label">Airflow DAGs Provisioned</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">300+</span>
+          <span class="stat-label">Production Tables Governed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Skills ─────────────────────────────────────────────────────────────── -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-label">What I Work With</div>
+    <h2 class="section-title">Technical Skills</h2>
+    <div class="skills-grid">
+
+      <div class="skill-group">
+        <div class="skill-group-title">Cloud & Infrastructure</div>
+        <div class="tags">
+          <span class="tag hot">GCP</span>
+          <span class="tag hot">Dataproc</span>
+          <span class="tag">Cloud Storage</span>
+          <span class="tag">Pub/Sub</span>
+          <span class="tag">Terraform</span>
+          <span class="tag">CI/CD</span>
+          <span class="tag">Looker</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">Programming & Databases</div>
+        <div class="tags">
+          <span class="tag hot">Python</span>
+          <span class="tag hot">SQL</span>
+          <span class="tag">Java</span>
+          <span class="tag">Scala</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">BigQuery</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">MongoDB</span>
+          <span class="tag">Parquet / ORC / Avro</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">Data Engineering</div>
+        <div class="tags">
+          <span class="tag hot">Apache Spark (PySpark)</span>
+          <span class="tag hot">Apache Airflow</span>
+          <span class="tag">Hadoop</span>
+          <span class="tag">Hive</span>
+          <span class="tag">Apache Oozie</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Experience ─────────────────────────────────────────────────────────── -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-label">Where I've Been</div>
+    <h2 class="section-title">Experience</h2>
+    <div class="timeline">
+
+      <!-- Yahoo -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <span class="exp-company">Yahoo Inc.</span>
+            <span class="exp-period">Nov 2023 — Present</span>
+          </div>
+          <div class="exp-role">Data Engineer · Los Angeles, CA</div>
+
+          <div class="exp-subheader">Data Infrastructure &amp; Optimization</div>
+          <ul style="margin-bottom:16px">
+            <li>
+              Built an <strong>Airflow data-preprocessing DAG plugin</strong> to enforce batch and
+              streaming workflow standards (schema validation, manifest generation, partition/backfill
+              handling, consistent logging/alerts); integrated into DAG templates and CI checks,
+              saving <strong>8,000+ manual hours</strong>
+              <span class="pill pill-gold">⏱ 8K hrs saved</span>.
+            </li>
+            <li>
+              Migrated legacy <strong>Pig/Hive batch pipelines to PySpark</strong> on Dataproc,
+              reducing annualized compute costs by <strong>$820K (99.7% reduction)</strong>
+              <span class="pill pill-gold">🏆 $820K/yr</span>;
+              automated schema and referential integrity checks across 64 production tables.
+            </li>
+            <li>
+              Built a <strong>Dataproc cluster teardown plugin</strong> eliminating false-success
+              DAG states, improving Platform Engineering incident detection from
+              <strong>70% → 100%</strong>
+              <span class="pill pill-green">✅ 100% coverage</span>.
+            </li>
+            <li>
+              Engineered an <strong>enterprise-scale data validation framework</strong> adopted
+              across <strong>300+ production tables</strong> with 25+ configurable quality rules
+              and automated alerting, establishing a self-serve data quality observability layer.
+            </li>
+          </ul>
+
+          <div class="exp-subheader">Data ETL &amp; Automation</div>
+          <ul style="margin-bottom:16px">
+            <li>
+              Led end-to-end migration from <strong>on-prem Hadoop to GCP</strong> via an automated
+              DAG-generation framework that provisioned <strong>1,000+ Apache Airflow DAGs</strong>
+              processing up to <strong>50TB/day</strong> of mail events; row-count and aggregate
+              comparisons confirmed data correctness and SLA compliance throughout.
+            </li>
+            <li>
+              Built and operated a <strong>BigQuery + Looker analytics pipeline</strong> serving
+              <strong>20+ downstream consumers</strong>, including enterprise telecom clients on
+              ~200MB/week external data feeds; owned SLAs and data contracts end-to-end.
+            </li>
+          </ul>
+
+          <div class="exp-subheader">Pipeline Orchestration &amp; Deployment</div>
+          <ul>
+            <li>
+              Designed <strong>autoscaling-aware Dataproc compute orchestration</strong> to
+              automatically provision and decommission clusters, reducing
+              <strong>$130K+/month</strong> in idle infrastructure costs
+              <span class="pill pill-gold">💰 $130K+/mo</span>.
+            </li>
+            <li>
+              Built <strong>partition-aware BigQuery tables</strong> and authorized views,
+              automating provisioning via <strong>Terraform + CI/CD</strong> and enabling
+              partition pruning to reduce query cost and latency.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Zscaler -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <span class="exp-company">Zscaler Inc.</span>
+            <span class="exp-period">May — Aug 2022</span>
+          </div>
+          <div class="exp-role">Data Scientist · Los Angeles, CA</div>
+          <ul>
+            <li>
+              Built an <strong>upsell prediction pipeline</strong> in Python and BigQuery to
+              ingest logs and CRM data into feature tables and train
+              <strong>LightGBM / CatBoost</strong> models with SHAP-based explanation;
+              deployed daily batch scoring to production, improving accuracy from
+              <strong>56% → 75%</strong>
+              <span class="pill pill-green">📈 +19pts</span>
+              and driving <strong>$300K in incremental sales</strong>
+              <span class="pill pill-gold">💰 $300K</span>.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Qilin Technologies -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <span class="exp-company">Qilin Technologies</span>
+            <span class="exp-period">Jan — Apr 2021</span>
+          </div>
+          <div class="exp-role">AI Engineer · Beijing</div>
+          <ul>
+            <li>
+              Built <strong>backend APIs with Python Flask</strong> to select and combine human
+              skeleton and contour key points for real-time scoliosis detection querying.
+            </li>
+            <li>
+              Collaborated with a <strong>medical rehabilitation specialist</strong> to determine
+              the optimal approach for detecting scoliosis from pose data.
+            </li>
+            <li>
+              Designed and built a <strong>front-end tutorial web page</strong> using React and
+              JavaScript.
+            </li>
+            <li>
+              Implemented an <strong>augmented classifier</strong> using angle checking and body
+              segment proportion analysis.
+            </li>
+            <li>
+              Performed <strong>unit and end-to-end testing</strong> on 8 app functions monthly,
+              coordinating with the full-stack team before each feature launch.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- UBC R&D -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <span class="exp-company">UBC R&amp;D</span>
+            <span class="exp-period">Jan — Aug 2020</span>
+          </div>
+          <div class="exp-role">AI Engineer &amp; AI Assistant · Vancouver, BC</div>
+          <ul>
+            <li>
+              Implemented <strong>Knowledge Distillation</strong> inference scripts using Keras.
+            </li>
+            <li>
+              Applied <strong>TensorFlow + Horovod distributed training</strong> strategies,
+              reducing training time by <strong>⅓</strong>
+              <span class="pill pill-green">⚡ 33% faster</span>.
+            </li>
+            <li>
+              Experimented with <strong>rotational-invariant features and Kalman filter</strong>
+              for model fine-tuning.
+            </li>
+            <li>
+              Built a <strong>data processing pipeline</strong> to make OpenPose model output
+              compatible with D-chip hardware.
+            </li>
+            <li>
+              Used <strong>PostgreSQL</strong> to execute spatial queries, compute convex hull,
+              and nearest-neighbor lookups.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Projects ───────────────────────────────────────────────────────────── -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-label">What I've Built</div>
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-grid">
+
+      <a class="project-card" href="https://github.com/yuedeng1998/Firebase_TopSong" target="_blank">
+        <span class="project-emoji">🎵</span>
+        <div class="project-name">Firebase Top Song</div>
+        <div class="project-desc">Python app using Firebase to track and manage top song data in real time.</div>
+        <span class="project-lang">Python · Firebase</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/yuedeng1998/Crawler-Engine" target="_blank">
+        <span class="project-emoji">🕷</span>
+        <div class="project-name">Crawler Engine</div>
+        <div class="project-desc">Java-based web crawling engine for automated data collection and indexing.</div>
+        <span class="project-lang">Java</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/yuedeng1998/Food_logger" target="_blank">
+        <span class="project-emoji">🍎</span>
+        <div class="project-name">Food Logger</div>
+        <div class="project-desc">Web app to log and track food consumption, backed by PHP and MySQL.</div>
+        <span class="project-lang">PHP · MySQL</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/yuedeng1998/The-little-prince-Video-Game" target="_blank">
+        <span class="project-emoji">👑</span>
+        <div class="project-name">The Little Prince Game</div>
+        <div class="project-desc">A C/C++ video game with tile-based levels, collectibles, enemy AI, and a health system inspired by The Little Prince.</div>
+        <span class="project-lang">C · C++</span>
+      </a>
+
+      <a class="project-card" href="https://github.com/yuedeng1998/MangoDB_Project" target="_blank">
+        <span class="project-emoji">🍃</span>
+        <div class="project-name">MongoDB Project</div>
+        <div class="project-desc">Python project exploring MongoDB for document storage, querying, and data manipulation.</div>
+        <span class="project-lang">Python · MongoDB</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Education ──────────────────────────────────────────────────────────── -->
+<section id="education">
+  <div class="section-inner">
+    <div class="section-label">Where I Learned</div>
+    <h2 class="section-title">Education</h2>
+    <div class="edu-grid">
+
+      <div class="edu-card">
+        <div class="edu-school">University of Southern California (USC)</div>
+        <div class="edu-degree">M.S. in Computer Science</div>
+        <div class="edu-detail">Los Angeles, CA · 2021 – 2023</div>
+        <div class="edu-badges">
+          <span class="edu-badge">🎖 Honors</span>
+          <span class="edu-badge">GPA 3.9 / 4.0</span>
+        </div>
+      </div>
+
+      <div class="edu-card">
+        <div class="edu-school">University of British Columbia (UBC)</div>
+        <div class="edu-degree">B.S. in Computer Science</div>
+        <div class="edu-detail">Vancouver, BC · 2016 – 2021</div>
+        <div class="edu-badges">
+          <span class="edu-badge">🏅 Top 5%</span>
+          <span class="edu-badge">International Scholarship</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ────────────────────────────────────────────────────────────── -->
+<section id="contact">
+  <div class="section-inner" style="max-width:700px">
+    <div class="section-label">Let's Talk</div>
+    <h2 class="section-title">Get In Touch</h2>
+    <p class="contact-sub">
+      I'm open to new opportunities in data engineering and ML infrastructure.
+      Feel free to reach out — I'd love to connect.
+    </p>
+    <div class="contact-items">
+      <a class="contact-item" href="mailto:valerieyue9@gmail.com">✉ valerieyue9@gmail.com</a>
+      <a class="contact-item" href="tel:2137930025">📞 213-793-0025</a>
+      <a class="contact-item" href="https://linkedin.com/in/valerie-deng" target="_blank">💼 LinkedIn</a>
+      <a class="contact-item" href="https://github.com/yuedeng1998" target="_blank">🐙 GitHub</a>
+      <span class="contact-item">📍 Los Angeles, CA</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Yue (Valerie) Deng · Built with care
+</footer>
+
+</body>
+</html>
